@@ -27,7 +27,6 @@
             line-height: 1.6;
         }
 
-        /* --- Custom Cursor --- */
         #cursor {
             width: 20px;
             height: 20px;
@@ -40,7 +39,6 @@
             mix-blend-mode: difference;
         }
 
-        /* --- Layout Elements --- */
         .glass-nav {
             background: rgba(10, 10, 10, 0.7);
             backdrop-filter: blur(20px);
@@ -56,7 +54,6 @@
             transform: translateY(30px);
         }
 
-        /* --- Typography --- */
         .hero-title {
             font-size: clamp(3rem, 10vw, 9rem);
             font-weight: 900;
@@ -69,7 +66,6 @@
             text-orientation: mixed;
         }
 
-        /* --- Background Decoration --- */
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -97,7 +93,6 @@
             to { transform: translate(20%, 20%); }
         }
 
-        /* --- Component Styles --- */
         .border-thin {
             border-color: rgba(255, 255, 255, 0.1);
         }
@@ -133,6 +128,16 @@
             height: 80px;
             background: linear-gradient(to bottom, white, transparent);
         }
+
+        .stroke-text { -webkit-text-stroke: 1px #fff; }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -142,7 +147,6 @@
         <div class="blob"></div>
     </div>
 
-    <!-- Navigation -->
     <nav class="glass-nav fixed top-0 w-full z-50 border-b border-thin">
         <div class="max-w-[1400px] mx-auto px-8 h-24 flex items-center justify-between">
             <div class="text-sm font-bold tracking-[0.3em] uppercase">Your Name / Lab</div>
@@ -157,7 +161,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="home" class="min-h-screen flex items-center relative pt-24 overflow-hidden">
         <div class="max-w-[1400px] mx-auto px-8 w-full">
             <div class="flex flex-col md:flex-row items-end gap-8 mb-16">
@@ -184,7 +187,6 @@
         <div class="scroll-indicator"></div>
     </section>
 
-    <!-- Stats/News Marquee (Optional extra touch) -->
     <div class="py-12 border-y border-thin overflow-hidden whitespace-nowrap">
         <div class="inline-block animate-marquee">
             <span class="text-4xl font-black text-transparent stroke-text opacity-20 mx-12">NEWS: PAPER ACCEPTED AT NATURE 2024</span>
@@ -192,19 +194,7 @@
             <span class="text-4xl font-black text-transparent stroke-text opacity-20 mx-12">VISITING SCHOLAR AT STANFORD UNIVERSITY</span>
         </div>
     </div>
-    <style>
-        .stroke-text { -webkit-text-stroke: 1px #fff; }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-            display: inline-block;
-            animation: marquee 30s linear infinite;
-        }
-    </style>
 
-    <!-- Research Focus -->
     <section id="research" class="section-padding bg-zinc-950">
         <div class="max-w-[1400px] mx-auto px-8">
             <div class="flex items-center gap-4 mb-20 reveal">
@@ -232,7 +222,6 @@
         </div>
     </section>
 
-    <!-- Publications -->
     <section id="publications" class="section-padding">
         <div class="max-w-[1400px] mx-auto px-8">
             <div class="flex justify-between items-end mb-24 reveal">
@@ -240,32 +229,10 @@
                     <span class="text-xs uppercase tracking-[0.3em] mb-4 block">Archives</span>
                     <h2 class="text-6xl font-black">Selected Works</h2>
                 </div>
-                <div class="text-sm text-gray-500">(2018 — 2024)</div>
+                <div id="pub-year-range" class="text-sm text-gray-500"></div>
             </div>
 
-            <div class="space-y-4">
-                <div class="pub-card py-10 reveal group flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div class="max-w-3xl">
-                        <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">Journal Article / Nature Communications</span>
-                        <h3 class="text-2xl font-bold group-hover:text-white">Neural mechanisms of collective decision making in large-scale social networks.</h3>
-                        <p class="text-sm text-gray-500 mt-2">First Author, 2024. [DOI: 10.1038/s41467-024-XXXXX-X]</p>
-                    </div>
-                    <div class="flex gap-4">
-                        <a href="#" class="w-12 h-12 rounded-full border border-thin flex items-center justify-center hover:bg-white hover:text-black transition-all">→</a>
-                    </div>
-                </div>
-
-                <div class="pub-card py-10 reveal group flex flex-col md:flex-row md:items-center justify-between gap-6" style="transition-delay: 0.1s;">
-                    <div class="max-w-3xl">
-                        <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">Conference Paper / ICWSM 2023</span>
-                        <h3 class="text-2xl font-bold group-hover:text-white">Predicting Information Cascades with Graph Neural Networks.</h3>
-                        <p class="text-sm text-gray-500 mt-2">Co-author, 2023. Best Paper Award Honorable Mention.</p>
-                    </div>
-                    <div class="flex gap-4">
-                        <a href="#" class="w-12 h-12 rounded-full border border-thin flex items-center justify-center hover:bg-white hover:text-black transition-all">→</a>
-                    </div>
-                </div>
-            </div>
+            <div id="publications-container" class="space-y-4"></div>
 
             <div class="mt-20 text-center reveal">
                 <a href="#" class="text-xs uppercase tracking-[0.4em] border-b border-gray-600 pb-2 hover:border-white transition-all">View All Publications</a>
@@ -273,7 +240,6 @@
         </div>
     </section>
 
-    <!-- Biography / CV -->
     <section id="cv" class="section-padding bg-white text-black">
         <div class="max-w-[1400px] mx-auto px-8">
             <div class="grid lg:grid-cols-12 gap-20">
@@ -283,7 +249,6 @@
                         京都大学にて博士（情報学）を取得後、MITメディアラボでの客員研究員を経て、現在は東京大学にて計算社会科学の教鞭を執っています。
                     </p>
                     <div class="aspect-square bg-gray-100 relative overflow-hidden">
-                        <!-- Placeholder for Portrait -->
                         <div class="absolute inset-0 flex items-center justify-center text-gray-300 uppercase text-[10px] tracking-[0.5em]">Portrait Placeholder</div>
                     </div>
                 </div>
@@ -309,17 +274,14 @@
                     </div>
                     <div>
                         <h4 class="text-xs font-bold uppercase tracking-widest border-b border-black/10 pb-4 mb-8">Selected Grants</h4>
-                        <ul class="space-y-4 text-sm">
-                            <li class="flex gap-4"><span class="font-bold">2023</span> <span>JSPS Grant-in-Aid for Early-Career Scientists</span></li>
-                            <li class="flex gap-4"><span class="font-bold">2021</span> <span>National Science Foundation Fellowship</span></li>
-                        </ul>
+                        <ul id="grants-list" class="space-y-4 text-sm">
+                            </ul>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer / Contact -->
     <footer id="contact" class="bg-black text-white pt-32 pb-16">
         <div class="max-w-[1400px] mx-auto px-8">
             <div class="border-t border-thin pt-24 mb-32 reveal">
@@ -345,57 +307,67 @@
         </div>
     </footer>
 
+    <script src="data.js"></script>
+
     <script>
-        // --- GSAP Animations ---
         gsap.registerPlugin(ScrollTrigger);
 
-        // Custom Cursor Logic
+        // --- Data Rendering Logic ---
+        function renderData() {
+            if (typeof myData === 'undefined') return;
+
+            // Render Publications
+            const pubContainer = document.getElementById('publications-container');
+            if (pubContainer && myData.publications) {
+                pubContainer.innerHTML = myData.publications.map((pub, index) => `
+                    <div class="pub-card py-10 reveal group flex flex-col md:flex-row md:items-center justify-between gap-6" style="transition-delay: ${index * 0.1}s">
+                        <div class="max-w-3xl">
+                            <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">${pub.category}</span>
+                            <h3 class="text-2xl font-bold group-hover:text-white">${pub.title}</h3>
+                            <p class="text-sm text-gray-500 mt-2">${pub.info}</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <a href="${pub.link}" class="w-12 h-12 rounded-full border border-thin flex items-center justify-center hover:bg-white hover:text-black transition-all">→</a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render Grants
+            const grantsList = document.getElementById('grants-list');
+            if (grantsList && myData.grants) {
+                grantsList.innerHTML = myData.grants.map(grant => `
+                    <li class="flex gap-4"><span class="font-bold">${grant.year}</span> <span>${grant.name}</span></li>
+                `).join('');
+            }
+        }
+
+        // Run rendering
+        renderData();
+
+        // --- Animations ---
         const cursor = document.querySelector('#cursor');
         document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, {
-                x: e.clientX - 10,
-                y: e.clientY - 10,
-                duration: 0.1,
-                ease: "power2.out"
-            });
+            gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.1, ease: "power2.out" });
         });
 
-        // Hover effect for cursor
         const links = document.querySelectorAll('a, button, .cursor-pointer');
         links.forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                gsap.to(cursor, { scale: 3, opacity: 0.2, duration: 0.3 });
-            });
-            link.addEventListener('mouseleave', () => {
-                gsap.to(cursor, { scale: 1, opacity: 0.5, duration: 0.3 });
-            });
+            link.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 3, opacity: 0.2, duration: 0.3 }));
+            link.addEventListener('mouseleave', () => gsap.to(cursor, { scale: 1, opacity: 0.5, duration: 0.3 }));
         });
 
-        // Reveal animations on scroll
         const reveals = document.querySelectorAll('.reveal');
         reveals.forEach((el) => {
             gsap.to(el, {
-                scrollTrigger: {
-                    trigger: el,
-                    start: "top 85%",
-                    toggleActions: "play none none none"
-                },
-                opacity: 1,
-                y: 0,
-                duration: 1.2,
-                ease: "power4.out"
+                scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" },
+                opacity: 1, y: 0, duration: 1.2, ease: "power4.out"
             });
         });
 
-        // Parallax effect for hero text
         gsap.to(".hero-title", {
-            scrollTrigger: {
-                trigger: "#home",
-                start: "top top",
-                scrub: true
-            },
-            y: 100,
-            opacity: 0.5
+            scrollTrigger: { trigger: "#home", start: "top top", scrub: true },
+            y: 100, opacity: 0.5
         });
     </script>
 </body>
