@@ -19,8 +19,14 @@
         .reveal { opacity: 0; transform: translateY(30px); }
         .hero-title { font-size: clamp(3rem, 10vw, 9rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.04em; }
         .border-thin { border-color: rgba(255, 255, 255, 0.1); }
+        
+        /* 業績カードのスタイル */
         .pub-card { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .pub-card:hover { background: rgba(255, 255, 255, 0.03); padding-left: 20px; }
+        
+        /* 年号の見出しスタイル */
+        .year-label { font-size: 3rem; font-weight: 100; color: rgba(255,255,255,0.2); margin-top: 3rem; margin-bottom: 1rem; font-family: 'Inter'; }
+        
         .nav-item { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--secondary-text); transition: color 0.3s; }
         .nav-item:hover { color: var(--accent-color); }
         .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%); }
@@ -55,7 +61,7 @@
                 <span class="text-xs uppercase tracking-[0.3em] mb-4 block text-gray-500">Academic Records</span>
                 <h2 class="text-6xl font-black">Achievements</h2>
             </div>
-            <div id="achievement-sections" class="space-y-24"></div>
+            <div id="achievement-sections" class="space-y-32"></div>
         </div>
     </section>
 
@@ -69,7 +75,8 @@
                 <div class="space-y-12 reveal">
                     <div>
                         <h4 class="text-xs font-bold uppercase tracking-widest border-b border-black/10 pb-4 mb-8">Selected Grants</h4>
-                        <ul id="grants-list" class="space-y-4 text-sm"></ul>
+                        <ul id="grants-list" class="space-y-4 text-sm text-gray-600">
+                            </ul>
                     </div>
                 </div>
             </div>
@@ -83,67 +90,96 @@
         </div>
     </footer>
 
-    <script src="data.js"></script>
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        const categories = [
-            { key: 'publications', title: '論文 / Publications' },
-            { key: 'reviews', title: '解説・総説 / Reviews' },
-            { key: 'books', title: '著書 / Books' },
-            { key: 'patents', title: '特許 / Patents' },
-            { key: 'media', title: '報道関係 / Media' },
-            { key: 'presentations', title: '学会発表 / Presentations' },
-            { key: 'awards', title: '受賞 / Awards' }
-        ];
+        async function init() {
+            try {
+                // CSVファイルを読み込む
+                const response = await fetch('achievements.csv');
+                const csvData = await response.text();
+                
+                // CSVを配列に変換（カンマ区切り、改行切り）
+                const rows = csvData.split('\n').map(row => row.split(',').map(cell => cell.trim()));
+                const headers = rows[0];
+                const data = rows.slice(1).filter(row => row.length >= headers.length && row[0] !== "");
 
-        function init() {
-            if (typeof myData === 'undefined') return;
+                const items = data.map(row => {
+                    return {
+                        category: row[0],
+                        year: row[1],
+                        title: row[2],
+                        summary: row[3],
+                        info: row[4],
+                        link: row[5]
+                    };
+                });
 
+                renderAchievements(items);
+                setupAnimations();
+            } catch (error) {
+                console.error("CSV読み込みエラー:", error);
+                document.getElementById('achievement-sections').innerHTML = "<p class='text-red-500'>achievements.csvが見つからないか、形式が正しくありません。</p>";
+            }
+        }
+
+        function renderAchievements(items) {
             const container = document.getElementById('achievement-sections');
             
-            categories.forEach(cat => {
-                const items = myData[cat.key];
-                if (items && items.length > 0) {
-                    const section = document.createElement('div');
-                    section.className = 'reveal';
-                    section.innerHTML = `
-                        <h3 class="text-xl font-bold border-b border-white/20 pb-4 mb-8 text-gray-400">${cat.title}</h3>
-                        <div class="space-y-2">
-                            ${items.map(item => `
-                                <div class="pub-card py-8 group flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                    <div class="max-w-3xl">
-                                        <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">${item.category}</span>
-                                        <h4 class="text-xl font-bold group-hover:text-white transition-colors">${item.title}</h4>
-                                        <p class="text-sm text-gray-600 mt-2">${item.info}</p>
-                                    </div>
-                                    <a href="${item.link}" class="w-12 h-12 rounded-full border border-thin flex items-center justify-center hover:bg-white hover:text-black transition-all">→</a>
+            // カテゴリーの一覧を取得（出現順）
+            const categories = [...new Set(items.map(i => i.category))];
+
+            categories.forEach(catName => {
+                const catSection = document.createElement('div');
+                catSection.className = 'reveal';
+                
+                let html = `<h3 class="text-xl font-bold border-b border-white/20 pb-4 mb-8 text-gray-500 uppercase tracking-widest">${catName}</h3>`;
+                
+                // そのカテゴリー内のアイテムを年（Year）でグループ化して降順に並べ替え
+                const catItems = items.filter(i => i.category === catName);
+                const years = [...new Set(catItems.map(i => i.year))].sort((a, b) => b - a);
+
+                years.forEach(year => {
+                    html += `<div class="year-label">${year}</div>`;
+                    const yearItems = catItems.filter(i => i.year === year);
+                    
+                    yearItems.forEach(item => {
+                        html += `
+                            <div class="pub-card py-10 group flex flex-col md:flex-row md:items-start justify-between gap-6">
+                                <div class="max-w-4xl">
+                                    <h4 class="text-2xl font-bold group-hover:text-white transition-colors mb-2">${item.title}</h4>
+                                    <p class="text-gray-400 text-base mb-4 italic leading-relaxed">${item.summary}</p>
+                                    <p class="text-xs text-gray-600 uppercase tracking-widest leading-loose">${item.info}</p>
                                 </div>
-                            `).join('')}
-                        </div>
-                    `;
-                    container.appendChild(section);
-                }
+                                ${item.link ? `
+                                <a href="${item.link}" target="_blank" class="w-12 h-12 rounded-full border border-thin flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">→</a>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+                });
+
+                catSection.innerHTML = html;
+                container.appendChild(catSection);
+            });
+        }
+
+        function setupAnimations() {
+            gsap.utils.toArray('.reveal').forEach(el => {
+                gsap.to(el, {
+                    scrollTrigger: { trigger: el, start: "top 90%" },
+                    opacity: 1, y: 0, duration: 1, ease: "power3.out"
+                });
             });
 
-            const grantsList = document.getElementById('grants-list');
-            if (myData.grants) {
-                grantsList.innerHTML = myData.grants.map(g => `<li class="flex gap-4"><span class="font-bold">${g.year}</span> <span>${g.name}</span></li>`).join('');
-            }
-
-            // Animate
-            gsap.utils.toArray('.reveal').forEach(el => {
-                gsap.to(el, { scrollTrigger: { trigger: el, start: "top 90%" }, opacity: 1, y: 0, duration: 1, ease: "power3.out" });
+            // Cursor Logic
+            const cursor = document.querySelector('#cursor');
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.1 });
             });
         }
 
         window.onload = init;
-
-        // Cursor
-        const cursor = document.querySelector('#cursor');
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.1 });
-        });
     </script>
 </body>
 </html>
