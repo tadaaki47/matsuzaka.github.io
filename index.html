@@ -1,121 +1,37 @@
-<!DOCTYPE html>
-<html lang="ja" style="font-size: 80%;"> <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Researcher Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&family=Noto+Sans+JP:wght@100;300;400;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg-color: #0a0a0a; --text-color: #f5f5f7; --accent-color: #ffffff; --secondary-text: #86868b; }
-        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; overflow-x: hidden; line-height: 1.6; }
-        #cursor { width: 20px; height: 20px; background: rgba(255, 255, 255, 0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.1s ease; mix-blend-mode: difference; }
-        .glass-nav { background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .section-padding { padding: 100px 0; } /* 少し余白も詰めました */
-        .reveal { opacity: 0; transform: translateY(30px); }
-        /* 10vw -> 8vw / 9rem -> 7.2rem に縮小 */
-        .hero-title { font-size: clamp(2.4rem, 8vw, 7.2rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.04em; }
-        .border-thin { border-color: rgba(255, 255, 255, 0.1); }
-        
-        .pub-card { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .pub-card:hover { background: rgba(255, 255, 255, 0.03); padding-left: 20px; }
-        
-        /* 3rem -> 2.4rem に縮小 */
-        .year-label { font-size: 2.4rem; font-weight: 100; color: rgba(255,255,255,0.2); margin-top: 2.4rem; margin-bottom: 0.8rem; font-family: 'Inter'; }
-        
-        .nav-item { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--secondary-text); transition: color 0.3s; }
-        .nav-item:hover { color: var(--accent-color); }
-        .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%); }
-    </style>
-</head>
-<body>
-    <div id="cursor"></div>
-    <div class="bg-gradient"></div>
-
-    <nav class="glass-nav fixed top-0 w-full z-50 border-b border-thin">
-        <div class="max-w-[1400px] mx-auto px-8 h-20 flex items-center justify-between">
-            <div class="text-xs font-bold tracking-[0.3em] uppercase">Tadaaki / Portfolio</div>
-            <div class="hidden lg:flex space-x-12">
-                <a href="#home" class="nav-item">Home</a>
-                <a href="#publications" class="nav-item">Achievements</a>
-                <a href="#cv" class="nav-item">Bio</a>
-                <a href="#contact" class="nav-item">Contact</a>
-            </div>
-        </div>
-    </nav>
-
-    <section id="home" class="min-h-screen flex items-center pt-24">
-        <div class="max-w-[1400px] mx-auto px-8 w-full">
-            <h1 class="hero-title reveal mb-10">REWRITING<br><span class="text-gray-600">SOCIETY</span><br>BY DATA.</h1>
-            <p class="text-lg max-w-xl reveal text-gray-400" style="transition-delay: 0.3s;">先端AI技術と社会科学を融合し、データの力で社会の構造を解き明かす研究に取り組んでいます。</p>
-        </div>
-    </section>
-
-    <section id="publications" class="section-padding border-t border-thin">
-        <div class="max-w-[1400px] mx-auto px-8">
-            <div class="mb-20 reveal">
-                <span class="text-[10px] uppercase tracking-[0.3em] mb-4 block text-gray-500">Academic Records</span>
-                <h2 class="text-5xl font-black">Achievements</h2>
-            </div>
-            <div id="achievement-sections" class="space-y-24"></div>
-        </div>
-    </section>
-
-    <section id="cv" class="section-padding bg-white text-black">
-        <div class="max-w-[1400px] mx-auto px-8">
-            <div class="grid lg:grid-cols-2 gap-16">
-                <div class="reveal">
-                    <h2 class="text-6xl font-black mb-10">Bio.</h2>
-                    <p class="text-lg leading-relaxed">ここにご自身の経歴などのプロフィールを記載してください。</p>
-                </div>
-                <div class="space-y-10 reveal">
-                    <div>
-                        <h4 class="text-[10px] font-bold uppercase tracking-widest border-b border-black/10 pb-4 mb-6">Selected Grants</h4>
-                        <ul id="grants-list" class="space-y-3 text-xs text-gray-600">
-                            </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer id="contact" class="section-padding bg-black text-white border-t border-thin">
-        <div class="max-w-[1400px] mx-auto px-8 text-center">
-            <h2 class="text-4xl font-black mb-6 italic">Say Hello.</h2>
-            <a href="mailto:your-email@example.com" class="text-2xl font-light underline underline-offset-8">Contact Me</a>
-        </div>
-    </footer>
-
-    <script>
+<script>
         gsap.registerPlugin(ScrollTrigger);
+
+        // 各カテゴリーで最初に表示する件数
+        const INITIAL_DISPLAY_COUNT = 3;
 
         async function init() {
             try {
                 const response = await fetch('achievements.csv');
                 const csvData = await response.text();
-                const rows = csvData.split('\n').map(row => row.split(',').map(cell => cell.trim()));
-                const headers = rows[0];
-                const data = rows.slice(1).filter(row => row.length >= headers.length && row[0] !== "");
-
-                const items = data.map(row => {
-                    return {
-                        category: row[0],
-                        year: row[1],
-                        title: row[2],
-                        summary: row[3],
-                        info: row[4],
-                        link: row[5]
-                    };
+                
+                // CSVパース（簡易版）
+                const rows = csvData.split('\n').map(row => {
+                    // カンマ区切りの対応（引用符などは考慮しない簡易分割）
+                    return row.split(',').map(cell => cell.trim());
                 });
+                
+                const headers = rows[0];
+                const data = rows.slice(1).filter(row => row.length >= 3 && row[0] !== "");
+
+                const items = data.map(row => ({
+                    category: row[0],
+                    year: row[1],
+                    title: row[2],
+                    summary: row[3] || "", // 画像の「Name（著者名）」などを想定
+                    info: row[4] || "",
+                    link: row[5] || ""
+                }));
 
                 renderAchievements(items);
                 setupAnimations();
             } catch (error) {
                 console.error("CSV読み込みエラー:", error);
-                document.getElementById('achievement-sections').innerHTML = "<p class='text-red-500'>achievements.csvが見つからないか、形式が正しくありません。</p>";
+                document.getElementById('achievement-sections').innerHTML = "<p class='text-red-500'>CSVの読み込みに失敗しました。</p>";
             }
         }
 
@@ -125,37 +41,67 @@
 
             categories.forEach(catName => {
                 const catSection = document.createElement('div');
-                catSection.className = 'reveal';
+                catSection.className = 'reveal mb-32';
+                catSection.id = `section-${catName}`;
                 
-                // 見出しサイズを小さく調整 (text-xl -> text-lg)
-                let html = `<h3 class="text-lg font-bold border-b border-white/20 pb-4 mb-6 text-gray-500 uppercase tracking-widest">${catName}</h3>`;
+                // カテゴリー名を大きく強調
+                let html = `<h3 class="text-3xl font-black border-b-2 border-white/20 pb-6 mb-10 text-white uppercase tracking-tighter">${catName}</h3>`;
                 
                 const catItems = items.filter(i => i.category === catName);
-                const years = [...new Set(catItems.map(i => i.year))].sort((a, b) => b - a);
-
-                years.forEach(year => {
-                    html += `<div class="year-label">${year}</div>`;
-                    const yearItems = catItems.filter(i => i.year === year);
-                    
-                    yearItems.forEach(item => {
-                        html += `
-                            <div class="pub-card py-8 group flex flex-col md:flex-row md:items-start justify-between gap-6">
-                                <div class="max-w-4xl">
-                                    <h4 class="text-xl font-bold group-hover:text-white transition-colors mb-2">${item.title}</h4>
-                                    <p class="text-gray-400 text-sm mb-3 italic leading-relaxed">${item.summary}</p>
-                                    <p class="text-[10px] text-gray-600 uppercase tracking-widest leading-loose">${item.info}</p>
-                                </div>
-                                ${item.link ? `
-                                <a href="${item.link}" target="_blank" class="w-10 h-10 rounded-full border border-thin flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">→</a>
-                                ` : ''}
+                // 全件をレンダリングするが、4件目以降は隠しておく
+                html += `<div class="items-wrapper">`;
+                
+                catItems.forEach((item, index) => {
+                    const isHidden = index >= INITIAL_DISPLAY_COUNT ? 'hidden' : '';
+                    html += `
+                        <div class="pub-card py-8 group flex flex-col md:flex-row md:items-start justify-between gap-6 ${isHidden}" data-extra-item>
+                            <div class="max-w-4xl">
+                                <div class="text-sm text-gray-500 mb-2 font-mono">${item.year}</div>
+                                <h4 class="text-xl font-bold group-hover:text-white transition-colors mb-2">${item.title}</h4>
+                                <p class="text-gray-400 text-sm mb-3 italic leading-relaxed">${item.summary}</p>
+                                <p class="text-[10px] text-gray-600 uppercase tracking-widest leading-loose">${item.info}</p>
                             </div>
-                        `;
-                    });
+                            ${item.link ? `
+                            <a href="${item.link}" target="_blank" class="w-10 h-10 rounded-full border border-thin flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">→</a>
+                            ` : ''}
+                        </div>
+                    `;
                 });
+
+                html += `</div>`;
+
+                // 3件より多い場合のみ More ボタンを表示
+                if (catItems.length > INITIAL_DISPLAY_COUNT) {
+                    html += `
+                        <button onclick="toggleMore(this)" class="mt-12 group flex items-center gap-4 text-xs font-bold uppercase tracking-[0.3em] text-gray-400 hover:text-white transition-colors">
+                            <span>More Achievements</span>
+                            <span class="w-8 h-px bg-gray-600 group-hover:bg-white group-hover:w-12 transition-all"></span>
+                        </button>
+                    `;
+                }
 
                 catSection.innerHTML = html;
                 container.appendChild(catSection);
             });
+        }
+
+        // Moreボタンの挙動
+        function toggleMore(button) {
+            const wrapper = button.previousElementSibling;
+            const extraItems = wrapper.querySelectorAll('[data-extra-item].hidden');
+            
+            // 全ての隠れているアイテムを表示
+            extraItems.forEach(item => {
+                item.classList.remove('hidden');
+                // ふわっと表示させるアニメーション
+                gsap.fromTo(item, {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.5});
+            });
+
+            // ボタンを消す（またはテキストを変える）
+            button.style.display = 'none';
+            
+            // スクロール位置の再計算（GSAP用）
+            ScrollTrigger.refresh();
         }
 
         function setupAnimations() {
@@ -165,14 +111,7 @@
                     opacity: 1, y: 0, duration: 1, ease: "power3.out"
                 });
             });
-
-            const cursor = document.querySelector('#cursor');
-            document.addEventListener('mousemove', (e) => {
-                gsap.to(cursor, { x: e.clientX - 10, y: e.clientY - 10, duration: 0.1 });
-            });
         }
 
         window.onload = init;
     </script>
-</body>
-</html>
