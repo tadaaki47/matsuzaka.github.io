@@ -15,9 +15,10 @@
             color: #f5f5f7;
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
             overflow-x: hidden;
-            cursor: none; 
+            cursor: none; /* デフォルトカーソルを非表示 */
         }
 
+        /* --- Custom Cursor --- */
         #cursor {
             width: 20px;
             height: 20px;
@@ -26,7 +27,7 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            mix-blend-mode: difference;
+            mix-blend-mode: difference; /* 背景色と反転するエフェクト */
             transform: translate(-50%, -50%);
             transition: transform 0.1s ease;
         }
@@ -36,6 +37,7 @@
             transform: translateY(30px);
         }
 
+        /* カードデザイン */
         .pub-card {
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -49,6 +51,7 @@
             padding-left: 1.5rem;
         }
 
+        /* タイムライン装飾 */
         .timeline-line {
             position: absolute;
             left: 1.5rem;
@@ -73,6 +76,7 @@
             border-radius: 10px;
         }
 
+        /* カーソル非表示対象 */
         a, button, .cursor-pointer {
             cursor: none;
         }
@@ -80,19 +84,26 @@
 </head>
 <body class="custom-scrollbar">
 
+    <!-- カスタムカーソル要素 -->
     <div id="cursor"></div>
 
     <!-- NAVIGATION -->
     <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- 大学名更新済み -->
             <span class="text-sm font-bold tracking-[0.3em] uppercase">Tadaaki Matsuzaka / The University of OSAKA</span>
+            
             <div class="hidden md:flex gap-8 text-[10px] font-bold tracking-widest uppercase text-gray-400 items-center">
                 <a href="#" class="nav-link hover:text-white transition-colors">Home</a>
                 <a href="#achievements" class="nav-link text-white border-b border-white">Achievements</a>
+                
+                <!-- ResearchMap Link -->
                 <a href="https://researchmap.jp/tadaaki_matsuzaka" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1">
                     ResearchMap 
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
                 </a>
+                
+                <!-- Nakano Lab Link -->
                 <a href="http://www.mat.eng.osaka-u.ac.jp/msp6/nakano/" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1">
                     Nakano Lab
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
@@ -103,8 +114,10 @@
 
     <main class="pt-48 pb-20 px-8 relative z-10">
         <section id="achievements" class="max-w-5xl mx-auto">
+            
             <!-- HEADER (タイトル) -->
-            <header class="mb-32 reveal" style="opacity: 1; transform: translateY(0);">
+            <!-- 初期スタイルでopacityを指定しないことでGSAPの制御下に置くが、ちらつき防止のためDOMは維持 -->
+            <header class="mb-32 reveal">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="w-8 h-px bg-gray-500"></div>
                     <span class="text-xs uppercase tracking-[0.5em] text-gray-500 block">Archive</span>
@@ -113,6 +126,7 @@
             </header>
 
             <div id="achievement-sections" class="space-y-40">
+                <!-- ローディングスピナー -->
                 <div class="flex flex-col items-center justify-center py-20" id="loading-spinner">
                     <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-white mb-4"></div>
                     <p class="text-[10px] uppercase tracking-widest text-gray-500">Connecting to achievements.csv...</p>
@@ -122,12 +136,14 @@
     </main>
 
     <footer class="py-20 border-t border-white/10 text-center">
+        <!-- フッター名更新済み -->
         <p class="text-gray-600 text-[10px] tracking-[0.3em] uppercase">© 2026 Tadaaki Matsuzaka. The University of OSAKA.</p>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
+        // --- 1. カーソル追従ロジック ---
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', (e) => {
             gsap.to(cursor, {
@@ -138,21 +154,23 @@
             });
         });
 
+        // --- 2. カーソルインタラクション (hover時の拡大) ---
+        // 動的要素にも対応するため関数化して適宜呼び出す
         const setupCursorInteractions = () => {
             const interactiveElements = 'a, button, .cursor-pointer, .pub-card';
             document.querySelectorAll(interactiveElements).forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    gsap.to(cursor, { scale: 3, opacity: 0.2, duration: 0.3 });
-                });
-                el.addEventListener('mouseleave', () => {
-                    gsap.to(cursor, { scale: 1, opacity: 0.5, duration: 0.3 });
-                });
+                // 重複登録防止のため一度削除してから登録するか、onceオプションなどを検討するが、
+                // 今回は単純な上書きで対応
+                el.onmouseenter = () => gsap.to(cursor, { scale: 3, opacity: 0.2, duration: 0.3 });
+                el.onmouseleave = () => gsap.to(cursor, { scale: 1, opacity: 0.5, duration: 0.3 });
             });
         };
 
+        // --- 3. CSV読み込みとレンダリング ---
         async function init() {
             let items = [];
             const container = document.getElementById('achievement-sections');
+            const loadingSpinner = document.getElementById('loading-spinner');
 
             try {
                 const response = await fetch('achievements.csv');
@@ -161,7 +179,9 @@
                 const csvText = await response.text();
                 const rows = csvText.split('\n').filter(row => row.trim() !== '');
                 
+                // ヘッダー行(1行目)をスキップしてパース
                 items = rows.slice(1).map(row => {
+                    // カンマ区切り（引用符内のカンマは無視する正規表現）
                     const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(col => col.trim().replace(/^"|"$/g, ''));
                     return {
                         category: columns[0] || "Other",
@@ -174,17 +194,26 @@
                 });
             } catch (error) {
                 console.warn("CSV load failed.", error);
-                container.innerHTML = `
+                
+                // エラー時の表示
+                if (loadingSpinner) loadingSpinner.remove();
+                
+                const errorMsg = document.createElement('div');
+                errorMsg.innerHTML = `
                     <div class="text-center py-20 border border-dashed border-white/10 rounded-xl">
                         <p class="text-gray-500 text-sm mb-4">achievements.csv could not be loaded.</p>
                         <p class="text-[10px] uppercase tracking-widest text-gray-700">Please ensure the file exists in the same directory.</p>
                     </div>
                 `;
-                setupAnimations(); // ヘッダーのみアニメーション実行
+                container.appendChild(errorMsg);
+                
+                // エラー時でもヘッダーのアニメーションは実行する
+                setupAnimations();
+                setupCursorInteractions(); // リンク等への反応は有効化
                 return;
             }
 
-            const loadingSpinner = document.getElementById('loading-spinner');
+            // 成功時の処理
             if (loadingSpinner) loadingSpinner.remove();
             
             if (items.length > 0) {
@@ -197,6 +226,7 @@
             }
         }
 
+        // --- 4. HTML生成 ---
         function renderAchievements(items) {
             const container = document.getElementById('achievement-sections');
             const categories = [...new Set(items.map(i => i.category))];
@@ -254,7 +284,9 @@
             });
         }
 
+        // --- 5. アニメーション設定 ---
         function setupAnimations() {
+            // .reveal クラスを持つ要素（ヘッダー含む）に対してアニメーション
             gsap.utils.toArray('.reveal').forEach(el => {
                 gsap.to(el, {
                     scrollTrigger: {
