@@ -18,7 +18,6 @@
             cursor: none; 
         }
 
-        /* --- Custom Cursor --- */
         #cursor {
             width: 20px;
             height: 20px;
@@ -83,41 +82,52 @@
 
     <div id="cursor"></div>
 
+    <!-- NAVIGATION -->
     <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <span class="text-sm font-bold tracking-[0.3em] uppercase">Tadaaki Matsuzaka / Osaka Univ.</span>
-            <div class="hidden md:flex gap-8 text-[10px] font-bold tracking-widest uppercase text-gray-400">
+            <span class="text-sm font-bold tracking-[0.3em] uppercase">Tadaaki Matsuzaka / The University of OSAKA</span>
+            <div class="hidden md:flex gap-8 text-[10px] font-bold tracking-widest uppercase text-gray-400 items-center">
                 <a href="#" class="nav-link hover:text-white transition-colors">Home</a>
-                <a href="#achievements" class="nav-link hover:text-white transition-colors text-white border-b border-white">Achievements</a>
-                <a href="#" class="nav-link hover:text-white transition-colors">Contact</a>
+                <a href="#achievements" class="nav-link text-white border-b border-white">Achievements</a>
+                <a href="https://researchmap.jp/tadaaki_matsuzaka" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1">
+                    ResearchMap 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
+                <a href="http://www.mat.eng.osaka-u.ac.jp/msp6/nakano/" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1">
+                    Nakano Lab
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                </a>
             </div>
         </div>
     </nav>
 
     <main class="pt-48 pb-20 px-8 relative z-10">
         <section id="achievements" class="max-w-5xl mx-auto">
-            <header class="mb-32 reveal">
-                <span class="text-xs uppercase tracking-[0.5em] text-gray-500 mb-4 block">Archive</span>
+            <!-- HEADER (タイトル) -->
+            <header class="mb-32 reveal" style="opacity: 1; transform: translateY(0);">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-px bg-gray-500"></div>
+                    <span class="text-xs uppercase tracking-[0.5em] text-gray-500 block">Archive</span>
+                </div>
                 <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">Selected<br>Achievements.</h1>
             </header>
 
             <div id="achievement-sections" class="space-y-40">
                 <div class="flex flex-col items-center justify-center py-20" id="loading-spinner">
                     <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-white mb-4"></div>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-500">Loading CSV Data...</p>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-500">Connecting to achievements.csv...</p>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="py-20 border-t border-white/10 text-center">
-        <p class="text-gray-600 text-[10px] tracking-[0.3em] uppercase">© 2026 Tadaaki Matsuzaka. Osaka University.</p>
+        <p class="text-gray-600 text-[10px] tracking-[0.3em] uppercase">© 2026 Tadaaki Matsuzaka. The University of OSAKA.</p>
     </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- カーソルロジック ---
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', (e) => {
             gsap.to(cursor, {
@@ -140,20 +150,19 @@
             });
         };
 
-        // --- CSV読み込みロジック ---
         async function init() {
             let items = [];
+            const container = document.getElementById('achievement-sections');
+
             try {
-                // achievements.csv を取得
                 const response = await fetch('achievements.csv');
                 if (!response.ok) throw new Error('CSV not found');
 
                 const csvText = await response.text();
-                // 簡易的なCSVパース（カンマ区切り、改行切り）
                 const rows = csvText.split('\n').filter(row => row.trim() !== '');
-                // 1行目はヘッダーとしてスキップ
+                
                 items = rows.slice(1).map(row => {
-                    const columns = row.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+                    const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(col => col.trim().replace(/^"|"$/g, ''));
                     return {
                         category: columns[0] || "Other",
                         year: columns[1] || "",
@@ -163,24 +172,28 @@
                         link: columns[5] || ""
                     };
                 });
-                console.log("Successfully loaded CSV:", items);
-
             } catch (error) {
-                console.warn("CSV load failed, using fallback mock data:", error);
-                // 失敗した場合のフォールバックデータ
-                items = [
-                    { category: "Papers", year: "2024", title: "CSV loading failed: Check your file path.", summary: "Author Name", info: "Journal of Materials", link: "" }
-                ];
+                console.warn("CSV load failed.", error);
+                container.innerHTML = `
+                    <div class="text-center py-20 border border-dashed border-white/10 rounded-xl">
+                        <p class="text-gray-500 text-sm mb-4">achievements.csv could not be loaded.</p>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-700">Please ensure the file exists in the same directory.</p>
+                    </div>
+                `;
+                setupAnimations(); // ヘッダーのみアニメーション実行
+                return;
             }
 
-            document.getElementById('loading-spinner')?.remove();
+            const loadingSpinner = document.getElementById('loading-spinner');
+            if (loadingSpinner) loadingSpinner.remove();
             
             if (items.length > 0) {
                 renderAchievements(items);
                 setupAnimations();
                 setupCursorInteractions();
             } else {
-                document.getElementById('achievement-sections').innerHTML = '<p class="text-center text-gray-500">No data found in CSV.</p>';
+                container.innerHTML = '<p class="text-center text-gray-500">No data found in CSV.</p>';
+                setupAnimations();
             }
         }
 
@@ -205,19 +218,20 @@
                 
                 let lastYear = null;
                 catItems.forEach((item, index) => {
-                    const showYear = item.year !== lastYear;
+                    const showYear = (item.year && item.year !== lastYear);
                     lastYear = item.year;
                     const yearDivider = (showYear && index !== 0) ? `<div class="year-divider ml-8"></div>` : '';
 
                     html += `
                         ${yearDivider}
-                        <div class="pub-card p-10 group flex flex-col md:flex-row md:items-start gap-8 relative cursor-pointer">
+                        <div class="pub-card p-10 group flex flex-col md:flex-row md:items-start gap-8 relative cursor-pointer" 
+                             ${item.link ? `onclick="window.open('${item.link}', '_blank')"` : ''}>
                             <div class="min-w-[100px] pt-1">
                                 ${showYear ? `<span class="text-3xl font-black text-white font-mono tracking-tighter">${item.year}</span>` : ''}
                             </div>
                             <div class="flex-1">
                                 <h4 class="text-xl md:text-2xl font-bold text-white/90 group-hover:text-white transition-colors mb-3 leading-snug">
-                                    ${item.link ? `<a href="${item.link}" target="_blank" class="hover:underline decoration-white/30">${item.title}</a>` : item.title}
+                                    ${item.title}
                                 </h4>
                                 <p class="text-sm text-white/50 mb-4 italic">${item.info}</p>
                                 <p class="text-xs text-gray-500 font-medium uppercase tracking-wider">
@@ -226,9 +240,9 @@
                             </div>
                             ${item.link ? `
                                 <div class="self-end md:self-center">
-                                    <a href="${item.link}" target="_blank" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
+                                    <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-                                    </a>
+                                    </div>
                                 </div>
                             ` : ''}
                         </div>
