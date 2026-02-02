@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tadaaki Matsuzaka | Achievements</title>
+    <title>Tadaaki Matsuzaka | The University of OSAKA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
@@ -15,7 +16,7 @@
             color: #f5f5f7;
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
             overflow-x: hidden;
-            cursor: none; /* デフォルトカーソルを非表示 */
+            cursor: none;
         }
 
         /* --- Custom Cursor --- */
@@ -27,7 +28,7 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            mix-blend-mode: difference; /* 背景色と反転するエフェクト */
+            mix-blend-mode: difference;
             transform: translate(-50%, -50%);
             transition: transform 0.1s ease;
         }
@@ -76,7 +77,6 @@
             border-radius: 10px;
         }
 
-        /* カーソル非表示対象 */
         a, button, .cursor-pointer {
             cursor: none;
         }
@@ -84,27 +84,24 @@
 </head>
 <body class="custom-scrollbar">
 
-    <!-- カスタムカーソル要素 -->
     <div id="cursor"></div>
 
     <!-- NAVIGATION -->
-    <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference">
+    <nav class="fixed top-0 w-full z-50 px-8 py-6 mix-blend-difference bg-black/50 backdrop-blur-sm border-b border-white/5">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- 大学名更新済み -->
-            <span class="text-sm font-bold tracking-[0.3em] uppercase">Tadaaki Matsuzaka / The University of OSAKA</span>
+            <span class="text-xs md:text-sm font-bold tracking-[0.2em] uppercase">Tadaaki Matsuzaka / The University of OSAKA</span>
             
             <div class="hidden md:flex gap-8 text-[10px] font-bold tracking-widest uppercase text-gray-400 items-center">
-                <a href="#" class="nav-link hover:text-white transition-colors">Home</a>
-                <a href="#achievements" class="nav-link text-white border-b border-white">Achievements</a>
+                <a href="#home" class="nav-link hover:text-white transition-colors cursor-pointer">Home</a>
+                <a href="#biography" class="nav-link hover:text-white transition-colors cursor-pointer">Biography</a>
+                <a href="#achievements" class="nav-link hover:text-white transition-colors cursor-pointer">Achievements</a>
                 
-                <!-- ResearchMap Link -->
-                <a href="https://researchmap.jp/tadaaki_matsuzaka" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1">
+                <a href="https://researchmap.jp/tadaaki_matsuzaka" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1 cursor-pointer">
                     ResearchMap 
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
                 </a>
                 
-                <!-- Nakano Lab Link -->
-                <a href="http://www.mat.eng.osaka-u.ac.jp/msp6/nakano/" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1">
+                <a href="http://www.mat.eng.osaka-u.ac.jp/msp6/nakano/" target="_blank" class="nav-link hover:text-white transition-colors flex items-center gap-1 cursor-pointer">
                     Nakano Lab
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
                 </a>
@@ -112,61 +109,154 @@
         </div>
     </nav>
 
-    <main class="pt-48 pb-20 px-8 relative z-10">
-        <section id="achievements" class="max-w-5xl mx-auto">
+    <main class="relative z-10">
+        
+        <!-- HERO SECTION -->
+        <section id="home" class="min-h-screen flex items-center justify-center relative px-8 pt-20">
+            <div class="max-w-5xl w-full mx-auto">
+                <p class="reveal text-xs uppercase tracking-[0.5em] text-gray-500 mb-6">Researcher Portfolio</p>
+                <h1 class="reveal text-5xl md:text-8xl font-black tracking-tighter text-white uppercase leading-tight mb-8">
+                    Designing<br>
+                    <span class="text-gray-600">Bone Quality</span><br>
+                    With Materials.
+                </h1>
+                <p class="reveal text-gray-400 max-w-2xl text-sm md:text-base leading-relaxed tracking-wide">
+                    Exploring the mechanism of bone matrix orientation and creating advanced biomaterials.
+                    <br>Assistant Professor at The University of OSAKA, Graduate School of Engineering.
+                </p>
+            </div>
             
-            <!-- HEADER (タイトル) -->
-            <!-- 初期スタイルでopacityを指定しないことでGSAPの制御下に置くが、ちらつき防止のためDOMは維持 -->
-            <header class="mb-32 reveal">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-8 h-px bg-gray-500"></div>
-                    <span class="text-xs uppercase tracking-[0.5em] text-gray-500 block">Archive</span>
-                </div>
-                <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">Selected<br>Achievements.</h1>
-            </header>
+            <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+                <span class="text-[10px] uppercase tracking-widest">Scroll</span>
+                <div class="w-px h-12 bg-gradient-to-b from-white to-transparent"></div>
+            </div>
+        </section>
 
-            <div id="achievement-sections" class="space-y-40">
-                <!-- ローディングスピナー -->
-                <div class="flex flex-col items-center justify-center py-20" id="loading-spinner">
-                    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-white mb-4"></div>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-500">Connecting to achievements.csv...</p>
+        <!-- BIOGRAPHY SECTION -->
+        <section id="biography" class="py-32 px-8 bg-[#0f0f0f]">
+            <div class="max-w-5xl mx-auto">
+                <header class="mb-20 reveal">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-px bg-gray-500"></div>
+                        <span class="text-xs uppercase tracking-[0.5em] text-gray-500 block">About</span>
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase">Biography.</h2>
+                </header>
+
+                <div class="grid md:grid-cols-12 gap-12 reveal">
+                    <div class="md:col-span-4">
+                        <h3 class="text-xl font-bold mb-8 border-b border-white/10 pb-4 text-white">Profile</h3>
+                        <p class="text-gray-400 text-sm leading-loose mb-8">
+                            松坂 忠昭 (Tadaaki Matsuzaka)<br>
+                            大阪大学大学院工学研究科<br>
+                            マテリアル生産科学専攻 助教<br>
+                            博士（工学）
+                        </p>
+                        <p class="text-gray-500 text-xs leading-relaxed">
+                            専門：生体材料学、バイオメカニクス、金属積層造形。<br>
+                            骨微細構造の形成メカニズムの解明と、それを制御する新規インプラント材料の創製に従事。
+                        </p>
+                    </div>
+
+                    <div class="md:col-span-8 space-y-12">
+                        <div>
+                            <h3 class="text-xl font-bold mb-8 border-b border-white/10 pb-4 text-white">Education & Experience</h3>
+                            <div class="relative border-l border-white/10 ml-2 space-y-10 pl-8">
+                                <div class="relative group cursor-pointer">
+                                    <span class="absolute -left-[37px] top-1.5 w-4 h-4 rounded-full bg-[#1a1a1a] border border-white/30 group-hover:bg-white group-hover:scale-110 transition-all"></span>
+                                    <span class="text-xs font-mono text-gray-500 mb-1 block">2025.04 - Present</span>
+                                    <h4 class="text-lg font-bold text-white mb-1">Assistant Professor</h4>
+                                    <p class="text-sm text-gray-400">Graduate School of Engineering, Osaka University</p>
+                                </div>
+                                <div class="relative group cursor-pointer">
+                                    <span class="absolute -left-[37px] top-1.5 w-4 h-4 rounded-full bg-[#1a1a1a] border border-white/30 group-hover:bg-white group-hover:scale-110 transition-all"></span>
+                                    <span class="text-xs font-mono text-gray-500 mb-1 block">2022.04 - 2025.03</span>
+                                    <h4 class="text-lg font-bold text-white mb-1">JSPS Research Fellow (DC1)</h4>
+                                    <p class="text-sm text-gray-400">Japan Society for the Promotion of Science</p>
+                                </div>
+                                <div class="relative group cursor-pointer">
+                                    <span class="absolute -left-[37px] top-1.5 w-4 h-4 rounded-full bg-[#1a1a1a] border border-white/30 group-hover:bg-white group-hover:scale-110 transition-all"></span>
+                                    <span class="text-xs font-mono text-gray-500 mb-1 block">2025.03</span>
+                                    <h4 class="text-lg font-bold text-white mb-1">Ph.D. in Engineering</h4>
+                                    <p class="text-sm text-gray-400">Osaka University</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACHIEVEMENTS SECTION -->
+        <section id="achievements" class="py-32 px-8 min-h-screen">
+            <div class="max-w-5xl mx-auto">
+                <header class="mb-32 reveal">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-px bg-gray-500"></div>
+                        <span class="text-xs uppercase tracking-[0.5em] text-gray-500 block">Archive</span>
+                    </div>
+                    <h2 class="text-6xl md:text-8xl font-black tracking-tighter text-white uppercase leading-none">Selected<br>Achievements.</h2>
+                </header>
+
+                <div id="achievement-sections" class="space-y-40">
+                    <div class="flex flex-col items-center justify-center py-20" id="loading-spinner">
+                        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-white mb-4"></div>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-500">Connecting to achievements.csv...</p>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="py-20 border-t border-white/10 text-center">
-        <!-- フッター名更新済み -->
         <p class="text-gray-600 text-[10px] tracking-[0.3em] uppercase">© 2026 Tadaaki Matsuzaka. The University of OSAKA.</p>
     </footer>
 
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-        // --- 1. カーソル追従ロジック ---
-        const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, {
-                x: e.clientX,
-                y: e.clientY,
-                duration: 0.1,
-                ease: "power2.out"
+        const INITIAL_DISPLAY_COUNT = 3;
+
+        // カテゴリー名の英語変換マップ
+        const CATEGORY_MAP = {
+            "論文": "Journal Papers",
+            "Papers": "Journal Papers",
+            "著書": "Books & Chapters",
+            "Books": "Books & Chapters",
+            "受賞": "Awards & Grants",
+            "Awards": "Awards & Grants",
+            "学会発表": "Conference Presentations",
+            "Conference": "Conference Presentations",
+            "国際会議": "International Conferences",
+            "国内学会": "Domestic Conferences",
+            "その他": "Others",
+            "Others": "Others"
+        };
+
+        // --- Navigation Scroll ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                gsap.to(window, {duration: 1, scrollTo: targetId, ease: "power3.inOut"});
             });
         });
 
-        // --- 2. カーソルインタラクション (hover時の拡大) ---
-        // 動的要素にも対応するため関数化して適宜呼び出す
+        // --- Cursor Logic ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
+        });
+
         const setupCursorInteractions = () => {
             const interactiveElements = 'a, button, .cursor-pointer, .pub-card';
             document.querySelectorAll(interactiveElements).forEach(el => {
-                // 重複登録防止のため一度削除してから登録するか、onceオプションなどを検討するが、
-                // 今回は単純な上書きで対応
                 el.onmouseenter = () => gsap.to(cursor, { scale: 3, opacity: 0.2, duration: 0.3 });
                 el.onmouseleave = () => gsap.to(cursor, { scale: 1, opacity: 0.5, duration: 0.3 });
             });
         };
 
-        // --- 3. CSV読み込みとレンダリング ---
+        // --- Data Loading ---
         async function init() {
             let items = [];
             const container = document.getElementById('achievement-sections');
@@ -179,9 +269,8 @@
                 const csvText = await response.text();
                 const rows = csvText.split('\n').filter(row => row.trim() !== '');
                 
-                // ヘッダー行(1行目)をスキップしてパース
                 items = rows.slice(1).map(row => {
-                    // カンマ区切り（引用符内のカンマは無視する正規表現）
+                    // 引用符対応のCSVパース
                     const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(col => col.trim().replace(/^"|"$/g, ''));
                     return {
                         category: columns[0] || "Other",
@@ -194,26 +283,17 @@
                 });
             } catch (error) {
                 console.warn("CSV load failed.", error);
-                
-                // エラー時の表示
                 if (loadingSpinner) loadingSpinner.remove();
-                
-                const errorMsg = document.createElement('div');
-                errorMsg.innerHTML = `
+                container.innerHTML = `
                     <div class="text-center py-20 border border-dashed border-white/10 rounded-xl">
                         <p class="text-gray-500 text-sm mb-4">achievements.csv could not be loaded.</p>
                         <p class="text-[10px] uppercase tracking-widest text-gray-700">Please ensure the file exists in the same directory.</p>
                     </div>
                 `;
-                container.appendChild(errorMsg);
-                
-                // エラー時でもヘッダーのアニメーションは実行する
                 setupAnimations();
-                setupCursorInteractions(); // リンク等への反応は有効化
                 return;
             }
 
-            // 成功時の処理
             if (loadingSpinner) loadingSpinner.remove();
             
             if (items.length > 0) {
@@ -226,40 +306,55 @@
             }
         }
 
-        // --- 4. HTML生成 ---
+        // --- Rendering ---
         function renderAchievements(items) {
             const container = document.getElementById('achievement-sections');
+            // ユニークなカテゴリーリストを取得
             const categories = [...new Set(items.map(i => i.category))];
 
-            categories.forEach(catName => {
+            categories.forEach(rawCatName => {
+                // カテゴリー名を英語に変換（マップになければそのまま表示）
+                const displayCatName = CATEGORY_MAP[rawCatName] || rawCatName;
                 const catSection = document.createElement('div');
                 catSection.className = 'reveal relative';
                 
                 let html = `
                     <div class="flex items-center gap-6 mb-16">
-                        <h3 class="text-2xl font-black uppercase tracking-[0.2em] text-white">${catName}</h3>
+                        <h3 class="text-2xl font-black uppercase tracking-[0.2em] text-white">${displayCatName}</h3>
                         <div class="h-px flex-1 bg-white/10"></div>
+                        <span class="text-[10px] text-gray-600 uppercase tracking-widest">${items.filter(i => i.category === rawCatName).length} Items</span>
                     </div>
                     <div class="timeline-line hidden md:block"></div>
+                    <div class="items-wrapper space-y-0">
                 `;
                 
-                const catItems = items.filter(i => i.category === catName);
-                html += `<div class="space-y-0">`;
+                const catItems = items.filter(i => i.category === rawCatName);
                 
                 let lastYear = null;
                 catItems.forEach((item, index) => {
                     const showYear = (item.year && item.year !== lastYear);
                     lastYear = item.year;
                     const yearDivider = (showYear && index !== 0) ? `<div class="year-divider ml-8"></div>` : '';
+                    
+                    // 3件目以降は初期状態で隠す
+                    const isHidden = index >= INITIAL_DISPLAY_COUNT ? 'hidden' : '';
 
                     html += `
                         ${yearDivider}
-                        <div class="pub-card p-10 group flex flex-col md:flex-row md:items-start gap-8 relative cursor-pointer" 
+                        <div class="pub-card p-10 group flex flex-col md:flex-row md:items-start gap-8 relative cursor-pointer ${isHidden}" 
+                             data-extra-item
                              ${item.link ? `onclick="window.open('${item.link}', '_blank')"` : ''}>
+                             
                             <div class="min-w-[100px] pt-1">
                                 ${showYear ? `<span class="text-3xl font-black text-white font-mono tracking-tighter">${item.year}</span>` : ''}
                             </div>
+                            
                             <div class="flex-1">
+                                <!-- カテゴリーラベル（見出し） -->
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2 block border-l-2 border-gray-700 pl-2">
+                                    ${displayCatName.replace(/s$/, '')} <!-- 単数形っぽく表示 -->
+                                </span>
+                                
                                 <h4 class="text-xl md:text-2xl font-bold text-white/90 group-hover:text-white transition-colors mb-3 leading-snug">
                                     ${item.title}
                                 </h4>
@@ -268,6 +363,7 @@
                                     <span class="text-gray-700 mr-2">Authors:</span>${item.summary}
                                 </p>
                             </div>
+                            
                             ${item.link ? `
                                 <div class="self-end md:self-center">
                                     <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
@@ -278,15 +374,49 @@
                         </div>
                     `;
                 });
-                html += `</div>`;
+                
+                html += `</div>`; // Close items-wrapper
+
+                // Moreボタンの追加（3件以上ある場合のみ）
+                if (catItems.length > INITIAL_DISPLAY_COUNT) {
+                    html += `
+                        <div class="mt-12 ml-4 md:ml-32">
+                            <button onclick="expandItems(this)" class="group flex items-center gap-4 text-xs font-bold uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors cursor-pointer">
+                                <span>View Full Archive</span>
+                                <span class="w-8 h-px bg-gray-600 group-hover:bg-white group-hover:w-16 transition-all"></span>
+                                <span class="opacity-0 group-hover:opacity-100 transition-opacity">-></span>
+                            </button>
+                        </div>
+                    `;
+                }
+
                 catSection.innerHTML = html;
                 container.appendChild(catSection);
             });
         }
 
-        // --- 5. アニメーション設定 ---
+        // Moreボタンクリック時の処理
+        window.expandItems = function(button) {
+            const wrapper = button.closest('.reveal').querySelector('.items-wrapper');
+            const hiddenItems = wrapper.querySelectorAll('.hidden');
+            
+            hiddenItems.forEach((item, idx) => {
+                item.classList.remove('hidden');
+                // ふわっと表示
+                gsap.fromTo(item, 
+                    { opacity: 0, y: 20 }, 
+                    { opacity: 1, y: 0, duration: 0.5, delay: idx * 0.1, ease: "power2.out" }
+                );
+            });
+
+            // ボタンを非表示にする
+            gsap.to(button, { opacity: 0, duration: 0.3, onComplete: () => button.parentNode.remove() });
+            
+            // スクロール位置の再計算（アニメーション用）
+            ScrollTrigger.refresh();
+        };
+
         function setupAnimations() {
-            // .reveal クラスを持つ要素（ヘッダー含む）に対してアニメーション
             gsap.utils.toArray('.reveal').forEach(el => {
                 gsap.to(el, {
                     scrollTrigger: {
@@ -302,7 +432,11 @@
             });
         }
 
-        window.onload = init;
+        window.onload = function() {
+            init();
+            setupAnimations();
+            setupCursorInteractions();
+        };
     </script>
 </body>
 </html>
